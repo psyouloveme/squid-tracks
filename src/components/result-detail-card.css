@@ -14,6 +14,10 @@
   --private-light-color: rgb(250, 232, 255);
   --private-normal-color: rgb(157, 0, 200);
   --private-dark-color: rgb(133, 36, 162);
+
+  --coop-light-color: rgb(250, 228, 202);
+  --coop-normal-color: rgb(255, 164, 136);
+  --coop-dark-color: rgb(255, 80, 16);
 }
 
 .regular .panel-heading.nav.navbar-default {
@@ -31,6 +35,9 @@
 .private .panel-heading.nav.navbar-default {
   background: var(--private-light-color);
 }
+.coop .panel-heading.nav.navbar-default {
+  background: var(--coop-light-color);
+}
 
 .regular .table-striped > tbody > tr:nth-of-type(odd) {
     background-color: var(--regular-light-color);
@@ -46,4 +53,7 @@
 }
 .private .table-striped > tbody > tr:nth-of-type(odd) {
     background-color: var(--private-light-color);
+}
+.coop .table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: var(--coop-normal-color);
 }

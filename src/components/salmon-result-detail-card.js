@@ -316,14 +316,13 @@ class SalmonResultDetailCard extends React.Component {
     //     : resultChanged.other_estimate_fes_power != null
     //       ? resultChanged.other_estimate_fes_power
     //       : null;
-    console.log('results:', results);
     return (
-      <div className={'salmon-run'}>
+      <div className={'coop'}>
         <PanelWithMenu
           header={
             <h3 className="panel-title">
               <FormattedMessage
-                id="resultDetails.title"
+                id="salmonresultDetails.title"
                 defaultMessage="Job #{job_id} Details"
                 values={{ job_id: resultChanged.job_id }}
               />

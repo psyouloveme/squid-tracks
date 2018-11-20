@@ -131,8 +131,7 @@ class SplatnetProvider extends React.Component {
   }
 
   handleApiData = (e, url, data) => {
-    console.log(url);
-    console.log(data);
+    console.log(url, data);
     if (url.includes('coop_results/')) {
       this.handleSalmonResult(data)
       return;

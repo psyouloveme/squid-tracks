@@ -1,15 +1,15 @@
 import React from 'react';
 import { Subscriber } from 'react-broadcast';
 import { FormattedMessage } from 'react-intl';
-import {
-  Grid,
-  Row,
-  Col
-} from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import './salmon.css';
 import { ipcRenderer } from 'electron';
+import SalmonResultControl from "./components/salmon-results-controls";
 import SalmonSummaryCard from "./components/salmon-summary-card";
-import SalmonResultDetailCard from "./components/salmon-result-detail-card"
+import SalmonResultsCard from "./components/salmon-results-card";
+import SalmonResultDetailCard from "./components/salmon-result-detail-card";
+import lodash from 'lodash';
+
 
 class NewSalmon extends React.Component {
   state = {
@@ -90,40 +90,38 @@ class NewSalmon extends React.Component {
     const { splatnet } = this.props;
     const { coop_results } = splatnet.current;
     const { statInk, currentResultIndex } = this.state;
-    const results = this.props.splatnet.current.coop_results.results;
+    const { results, summary } = this.props.splatnet.current.coop_results;
     const currentJob = this.getCurrentSalmon();
     
-    //const currentCoop = this.getCurrentSalmon();
-    console.log('splatnet: ', splatnet);
-    console.log('statInk: ', statInk);
-    console.log('results: ', results);
-    console.log('coop_results: ', coop_results);
-    console.log('currentJob: ', currentJob);
     return (
       <Grid fluid style={{ paddingTop: 65 }}>
         <Row>
-          <Col md={12}>
-            <h1 style={{ marginTop: 0 }}>
-              <FormattedMessage
-                id="newsalmon.title"
-                defaultMessage="Salmon Run Stats"
-              />
-            </h1>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12} sm={6} md={4} lg={3}>
-            <SalmonSummaryCard data={coop_results.summary.card}/>
-          </Col>
-        </Row>
-        <Row>
+        <Col md={12}>
+        <SalmonResultControl
+              result={currentJob}
+              resultIndex={currentResultIndex}
+              results={results}
+              changeResult={this.changeResult}
+              getResults={this.getResults}
+              setStatInkInfo={this.setStatInkInfo}
+              statInk={statInk}
+            />
+            {!lodash.isEmpty(currentJob) ? (
           <SalmonResultDetailCard
                 results={currentJob}
                 statInk={statInk}
                 changeResult={this.changeResultByBattleNumber}
                 summary={results.summary}
-              />
+              />) : null}
+          <SalmonSummaryCard data={coop_results.summary.card}/>
+          {/* <SalmonResultsCard results={results} statInk={statInk} changeResult={this.changeResultByBattleNumber} summary={summary}/> */}
+
+          </Col>
         </Row>
+        {/* <Row>
+          <Col md={12}>
+          </Col>
+        </Row> */}
       </Grid>
     );
   }

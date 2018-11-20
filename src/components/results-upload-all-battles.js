@@ -123,7 +123,7 @@ class UploadAllBattlesButton extends React.Component {
 
   render() {
     const { buttonText } = this.state;
-    return <Button onClick={this.uploadAllBattles}>{buttonText}</Button>;
+    return <Button disabled={this.props.disabled} onClick={this.uploadAllBattles}>{buttonText}</Button>;
   }
 }
 

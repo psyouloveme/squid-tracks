@@ -274,14 +274,12 @@ const SalmonDetail = ({ detail }) => {
 
 class Salmon extends React.Component {
   componentDidMount() {
-    console.log("salmon.componentdidmount");
     this.props.splatnet.comm.updateCoop();
   }
 
   render() {
     const { splatnet } = this.props;
     const { coop_schedules } = splatnet.current;
-    console.log("salmon.render");
     return (
       <Grid fluid style={{ paddingTop: 65 }}>
         <Row>

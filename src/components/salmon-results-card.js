@@ -236,11 +236,11 @@ class SalmonResultsCard extends React.Component {
     const averages = this.getAverages(results);
     const normalized = this.normalize(results, normalizeTime);
     const sortedResults = cloneDeep(normalized);
-    sortedResults.forEach(
-      result =>
-        (result.k_a =
-          result.player_result.kill_count + result.player_result.assist_count)
-    );
+    // sortedResults.forEach(
+    //   result =>
+    //     (result.k_a =
+    //       result.player_result.kill_count + result.player_result.assist_count)
+    // );
 
     sort(
       sortedResults,

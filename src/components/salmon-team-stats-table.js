@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Image } from 'react-bootstrap';
+import { Table, Image, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
 const SalmonTeamHeader = ({ player = { player: {} } }) => (
@@ -17,7 +17,6 @@ const SalmonTeamHeader = ({ player = { player: {} } }) => (
           defaultMessage="Weapon"
         />
       </th>
-      <th />
       <th>
         <FormattedMessage
           id="salmonresultDetails.teamStats.header.bossKills"
@@ -33,7 +32,7 @@ const SalmonTeamHeader = ({ player = { player: {} } }) => (
       <th>
         <FormattedMessage
           id="salmonresultDetails.teamStats.header.specials"
-          defaultMessage="Specials"
+          defaultMessage="Special"
         />
       </th>
       <th>
@@ -60,9 +59,11 @@ const SalmonTeamHeader = ({ player = { player: {} } }) => (
 
 const SalmonPlayerRow = ({ player, playerDropped, thumbBase }) => {
   //TODO: figure out how to tell if someone dropped and re-add strikes/styles
-  console.log('SalmonPlayerRow:player', player)
-  console.log('SalmonPlayerRow:playerDropped', playerDropped)
-  console.log('SalmonPlayerRow:thumbBase', thumbBase)
+  const { boss_kill_counts } = player;
+  const bossKillCount = Object.keys(boss_kill_counts).reduce(function(previous, key) {
+    return parseInt(previous) + parseInt(boss_kill_counts[key].count);
+  });
+
   return ( 
     <tr style={{ color: playerDropped ? 'lightgrey' : undefined }} >
       <td>
@@ -75,25 +76,30 @@ const SalmonPlayerRow = ({ player, playerDropped, thumbBase }) => {
       </td>
 
       <td style={{ textAlign: 'center', background: 'darkgrey' }}>
-        {player.weapon_list.map((weapon) => {return weapon.weapon.name})}
-      </td>
-      <td>        
-      {/* {
-          player.boss_kill_counts.map(weapon =>  {
+        {player.weapon_list.map((weapon) => {
+          return (
+            <OverlayTrigger placement='bottom' overlay={
+              <Tooltip id={'weapon-' + weapon.weapon.id + '-' + player.pid}>
+                          {weapon.weapon.name}
+              </Tooltip>}
+            >
             <Image
-            src={thumbBase + weapon.thumbnail}
-            style={{ maxHeight: 30 }}
-            alt={weapon.name}
-          />
-          })
-      } */}
-      boss_kills
+              src={thumbBase + weapon.weapon.thumbnail}
+              style={{ maxHeight: 30 }}
+              alt={weapon.name}
+              title={weapon.name}
+            />
+            </OverlayTrigger>
+        )})}
+      </td>
+      <td>
+        {bossKillCount}        
       </td>
       <td>
         {player.dead_count}
       </td>
-      <td>{player.golden_ikura_num}</td>
       <td>{player.special.name}</td>
+      <td>{player.golden_ikura_num}</td>
       <td>{player.ikura_num}</td>
       <td>{player.help_count}</td>
     </tr>
@@ -101,12 +107,14 @@ const SalmonPlayerRow = ({ player, playerDropped, thumbBase }) => {
 };
 
 const SalmonTeamStatTable = ({ result, team }) => {
+  console.log('stattable player', team[1]);
   return (
     <Table striped bordered condensed hover>
       <SalmonTeamHeader player={team[0]} />
       <tbody>
         {team.map(player => (
           <SalmonPlayerRow
+            key={player.pid}
             player={player}
             playerDropped={false}
             thumbBase={'https://app.splatoon2.nintendo.net'}

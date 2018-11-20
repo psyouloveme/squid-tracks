@@ -26,5 +26,9 @@ export default {
   fes_team: {
     normal: 'gray',
     dark: 'darkgray'
+  },
+  coop: {
+    normal: 'rgb(255, 164, 136)',
+    dark: 'rgb(255, 80, 16)'
   }
 };
