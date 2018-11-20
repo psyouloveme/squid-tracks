@@ -11,6 +11,9 @@ import {
   Tooltip
 } from 'react-bootstrap';
 import './salmon.css';
+import { ipcRenderer } from 'electron';
+import SalmonSummaryCard from "./components/salmon-summary-card";
+
 
 const SalmonTime = ({ unixTime }) => {
   return (
@@ -24,6 +27,8 @@ const SalmonTime = ({ unixTime }) => {
     </React.Fragment>
   );
 };
+
+
 
 const TodayMarker = ({ day }) => {
   const now = new Date().getTime() / 1000;
@@ -156,6 +161,8 @@ function getTimesWithinDay(unixTime, schedules) {
   return { times, day };
 }
 
+
+
 const SalmonCalendar = ({ schedules }) => {
   if (schedules == null || schedules.length <= 0) {
     return null;
@@ -272,37 +279,84 @@ const SalmonDetail = ({ detail }) => {
   );
 };
 
-class Salmon extends React.Component {
+class NewSalmon extends React.Component {
+  state = {
+    currentResultIndex: -1,
+    statInk: {},
+    initialized: false
+  };
+
+  getResults = () => {
+    const { splatnet } = this.props;
+    splatnet.comm.updateCoopResults();
+  };
+
+  changeResult = arrayIndex => {
+    const { splatnet } = this.props;
+    const results = splatnet.current.results.results;
+    const battleNumber = results[arrayIndex].battle_number;
+    splatnet.comm.getSalmon(battleNumber);
+    this.setState({
+      currentResultIndex: arrayIndex
+    });
+  };
+
+  getCurrentSalmon() {
+    const { splatnet } = this.props;
+    const { currentResultIndex } = this.state;
+
+    const { results } = this.props.splatnet.current.coop_results;
+
+    if (
+      results[currentResultIndex] == null ||
+      results[currentResultIndex].job_id == null
+    ) {
+      return {};
+    }
+    const battleNumber = results[currentResultIndex].battle_number;
+
+    if (this.props.splatnet.cache.salmon[battleNumber] == null) {
+      splatnet.comm.getSalmon(battleNumber);
+      return {};
+    }
+
+    const battle = this.props.splatnet.cache.getSalmon[battleNumber];
+    return battle;
+  }
+
   componentDidMount() {
-    console.log("salmon.componentdidmount");
-    this.props.splatnet.comm.updateCoop();
+    this.props.splatnet.comm.updateCoopResults();
+    const statInkInfo = ipcRenderer.sendSync('getFromStatInkStore', 'info');
+    this.setState({
+      statInk: statInkInfo,
+      initialized: false,
+      currentResultIndex: 0
+    });
   }
 
   render() {
     const { splatnet } = this.props;
-    const { coop_schedules } = splatnet.current;
-    console.log("salmon.render");
+    
+    const { salmon } = this.props.splatnet.current;
+    const currentCoop = this.getCurrentSalmon();
+    
+    console.log(salmon);
     return (
       <Grid fluid style={{ paddingTop: 65 }}>
         <Row>
           <Col md={12}>
             <h1 style={{ marginTop: 0 }}>
               <FormattedMessage
-                id="salmon.title"
-                defaultMessage="Shift Schedule"
+                id="newsalmon.title"
+                defaultMessage="Salmon Run Stats"
               />
             </h1>
           </Col>
         </Row>
         <Row>
           <Col xs={12} sm={6} md={4} lg={3}>
-            <SalmonCalendar schedules={coop_schedules.schedules} />
+            <SalmonSummaryCard data={salmon.summary.card}/>
           </Col>
-          {coop_schedules.details.map(d => (
-            <Col xs={12} sm={6} md={4} lg={3} key={d.start_time}>
-              <SalmonDetail detail={d} />
-            </Col>
-          ))}
         </Row>
       </Grid>
     );
@@ -312,7 +366,7 @@ class Salmon extends React.Component {
 const SalmonWithSplatnet = () => {
   return (
     <Subscriber channel="splatnet">
-      {splatnet => <Salmon splatnet={splatnet} />}
+      {splatnet => <NewSalmon splatnet={splatnet} />}
     </Subscriber>
   );
 };

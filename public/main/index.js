@@ -12,6 +12,7 @@ const { uaException } = require('./analytics');
 
 const Store = require('./store');
 require('./battles-store');
+require('./salmon-store');
 const mitm = require('./mitm-read-cookie');
 
 process.on('uncaughtException', err => {
@@ -82,6 +83,11 @@ ipcMain.on('setToStatInkStore', (event, settingName, value) => {
   event.returnValue = true;
 });
 
+ipcMain.on('setSalmonToStatInkStore', (event, settingName, value) => {
+  statInkStore.set(settingName, value);
+  event.returnValue = true;
+});
+
 ipcMain.on('writeToStatInk', async (event, result, type) => {
   try {
     const info = await writeToStatInk(
@@ -132,6 +138,10 @@ ipcMain.on('setStatInkApiToken', (event, value) => {
 });
 
 ipcMain.on('saveBattlesToCsv', (event, file, csv) => {
+  fs.writeFileSync(file, csv);
+});
+
+ipcMain.on('saveSalmonToCsv', (event, file, csv) => {
   fs.writeFileSync(file, csv);
 });
 

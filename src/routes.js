@@ -4,6 +4,7 @@ import { Subscriber } from 'react-broadcast';
 import ApiViewer from './api-viewer';
 import Schedule from './schedule';
 import Salmon from './salmon';
+import NewSalmon from './newsalmon';
 import Records from './records';
 import Results from './results';
 import Meta from './meta';
@@ -51,6 +52,7 @@ const Routes = ({
           <Route path="/testApi" component={ApiViewer} />
           <Route path="/schedule" component={Schedule} />
           <Route path="/salmon" component={Salmon} />
+          <Route path="/newsalmon" component={NewSalmon} />
           <Route path="/records" component={Records} />
           <Route path="/results" component={Results} />
           <Route path="/meta" component={Meta} />

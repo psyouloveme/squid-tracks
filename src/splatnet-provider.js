@@ -13,16 +13,27 @@ class SplatnetProvider extends React.Component {
         summary: {},
         results: []
       },
+      coop_results: {
+        summary: {
+          stats: [],
+          card: {}
+        },
+        results: []
+      },
+      coop_schedules: { 
+        details: [], 
+        schedules: [] 
+      },
       annieOriginal: [],
       annie: { merchandises: [] },
       schedule: { gachi: [], league: [], regular: [] },
-      coop_schedules: { details: [], schedules: [] },
       records: {
         records: { player: { nickname: '' } }
       }
     },
     cache: {
       battles: {},
+      salmon: {},
       league: {
         team: {},
         pair: {}
@@ -32,6 +43,41 @@ class SplatnetProvider extends React.Component {
     comm: {
       updateCoop: () => {
         ipcRenderer.send('getApiAsync', 'coop_schedules');
+      },
+      updateCoopResults: () => {
+        
+        ipcRenderer.send('getApiAsync', 'coop_results');
+      },
+      getSalmon: (jobId, sync = false) => {
+        
+        const cachedSalmon = this.state.cache.salmon[jobId];
+        if (cachedSalmon != null)
+        {
+          
+          return cachedSalmon;
+        }
+
+        const storedSalmon = ipcRenderer.sendSync('getSalmonFromStore', jobId);
+        if (storedSalmon != null) {
+          this.setSalmonToCache(storedSalmon);
+          
+          return storedSalmon;
+        }
+
+        if (sync) {
+          const freshSalmon = ipcRenderer.sendSync(
+            'getApi',
+            `coop_results/${jobId}`
+          );
+          this.setSalmonToCache(freshSalmon);
+          this.setSalmonToStore(freshSalmon);
+          
+          return freshSalmon;
+        } else {
+          ipcRenderer.send('getApiAsync', `coop_results/${jobId}`);
+          
+          return;
+        }
       },
       updateSchedule: () => {
         ipcRenderer.send('getApiAsync', 'schedules');
@@ -85,7 +131,13 @@ class SplatnetProvider extends React.Component {
   }
 
   handleApiData = (e, url, data) => {
-    if (url.includes('results/')) {
+    console.log(url);
+    console.log(data);
+    if (url.includes('coop_results/')) {
+      this.handleSalmonResult(data)
+      return;
+    }
+    else if (url.includes('results/')) {
       this.handleBattleResult(data);
       return;
     }
@@ -111,6 +163,11 @@ class SplatnetProvider extends React.Component {
       case 'results':
         this.setState({
           current: update(this.state.current, { $merge: { results: data } })
+        });
+        return;
+      case 'coop_results':
+        this.setState({
+          current: update(this.state.current, { $merge: { coop_results: data } })
         });
         return;
       case 'onlineshop/merchandises':
@@ -163,6 +220,13 @@ class SplatnetProvider extends React.Component {
     this.setBattleToStore(battle);
   };
 
+  handleSalmonResult = salmon => {
+    
+    this.setSalmonToCache(salmon);
+    this.setSalmonToStore(salmon);
+  };
+
+
   handleApiError = (e, err) => {
     this.setState({ lastError: err });
     this.props.history.push('/error');
@@ -179,8 +243,25 @@ class SplatnetProvider extends React.Component {
     });
   }
 
+  setSalmonToCache(freshSalmon) {
+    const number = freshSalmon.job_id;
+    
+    const salmon = update(this.state.cache.salmon, {
+      $merge: { [number]: freshSalmon }
+    });
+    
+    this.setState({
+      cache: update(this.state.cache, { $merge: { salmon: salmon } })
+    });
+    
+  }
+
   setBattleToStore(battle) {
     ipcRenderer.sendSync('setBattleToStore', battle);
+  }
+
+  setSalmonToStore(salmon) {
+    ipcRenderer.sendSync('setSalmonToStore', salmon);
   }
 
   render() {

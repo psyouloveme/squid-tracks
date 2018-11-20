@@ -16,9 +16,29 @@ const generalFields = [
   'rule.key'
 ];
 
+const salmonRunFields = [
+  'start_time',
+  'job_id',
+  'job_rate',
+  'end_time',
+  'danger_rate',
+  'grade_point',
+  'job_score',
+  'play_time',
+  'grade_point_delta',
+  'kuma_point'
+];
+
+
+
 export function getGeneralFields() {
   return generalFields;
 }
+
+export function getSalmonRunFields(){
+  return salmonRunFields;
+}
+
 
 const playerFields = [
   'kill_count',
