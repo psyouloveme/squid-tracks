@@ -22,6 +22,7 @@ import lodash from 'lodash';
 import JobSummary from './salmon-detail-summary';
 import SalmonResultsCard from './salmon-results-card';
 import SalmonTeamStatsTable from './salmon-team-stats-table';
+import SalmonEnemyStatTable from './salmon-enemy-stats-table';
 import PanelWithMenu from './panel-with-menu';
 import TeamRadar from './team-radar';
 import { getSalmonRunFields } from './export-detail-helpers';
@@ -127,7 +128,7 @@ class SalmonResultDetailMenu extends React.Component {
   }
 }
 
-const SalmonTeamBadges = ({ rate, rank, danger, kuma, grade }) => {
+const SalmonTeamBadges = ({ rate, rank, danger, kuma, grade, score }) => {
   return (
     <React.Fragment>
       {rank != null ? (
@@ -142,11 +143,11 @@ const SalmonTeamBadges = ({ rate, rank, danger, kuma, grade }) => {
           <FormattedMessage
             id="salmonresultDetails.summary.rank"
             defaultMessage="Rank {rank}"
-            values={{ rank: rank }}
+            values={{ rank }}
           />
         </Label>
       ) : null}
-      {grade != null ? (
+      {score != null ? (
         <Label
           bsStyle="default"
           style={{
@@ -156,25 +157,9 @@ const SalmonTeamBadges = ({ rate, rank, danger, kuma, grade }) => {
           }}
         >
           <FormattedMessage
-            id="salmonresultDetails.summary.grade"
-            defaultMessage="Grade {grade}"
-            values={{ grade: grade }}
-          />
-        </Label>
-      ) : null}
-      {danger != null ? (
-        <Label
-          bsStyle="default"
-          style={{
-            fontWeight: 'normal',
-            marginLeft: 5,
-            marginRight: 5
-          }}
-        >
-          <FormattedMessage
-            id="salmonresultDetails.summary.danger"
-            defaultMessage="Hazard {danger}"
-            values={{ danger: danger }}
+            id="salmonesultDetails.summary.score"
+            defaultMessage="Score {score}"
+            values={{ score }}
           />
         </Label>
       ) : null}
@@ -189,24 +174,8 @@ const SalmonTeamBadges = ({ rate, rank, danger, kuma, grade }) => {
         >
           <FormattedMessage
             id="salmonresultDetails.summary.rate"
-            defaultMessage="Hazard {rate}"
-            values={{ rate: rate }}
-          />
-        </Label>
-      ) : null}
-      {kuma != null ? (
-        <Label
-          bsStyle="default"
-          style={{
-            fontWeight: 'normal',
-            marginLeft: 5,
-            marginRight: 5
-          }}
-        >
-          <FormattedMessage
-            id="salmonesultDetails.summary.kuma"
-            defaultMessage="Kuma {kuma}"
-            values={{ kuma: kuma }}
+            defaultMessage="Pay Grade {rate}%"
+            values={{ rate }}
           />
         </Label>
       ) : null}
@@ -284,6 +253,7 @@ class SalmonResultDetailCard extends React.Component {
   render() {
     const { results, statInk } = this.props;
     const { anonymize } = this.state;
+    const { wave_details, job_result } = results;
     if (lodash.isEmpty(results)) {
       return null;
     }
@@ -294,6 +264,7 @@ class SalmonResultDetailCard extends React.Component {
     const myTeam = resultChanged.other_results.slice(0);
     //myTeam.unshift(resultChanged.player_result);
     myTeam.unshift(resultChanged.my_result);
+
     //myTeam.sort((a, b) => b.sort_score - a.sort_score);
 
 
@@ -316,6 +287,7 @@ class SalmonResultDetailCard extends React.Component {
     //     : resultChanged.other_estimate_fes_power != null
     //       ? resultChanged.other_estimate_fes_power
     //       : null;
+    console.log(results);
     return (
       <div className={'coop'}>
         <PanelWithMenu
@@ -380,14 +352,24 @@ class SalmonResultDetailCard extends React.Component {
                         defaultMessage="My Team"
                       />
                       <SalmonTeamBadges
-                      rate={results.rate}
-                      rank={results.rank}
-                      danger={results.danger}
-                      kuma={results.kuma}
-                      grade={results.grade.name}
+                        rate={results.job_rate}
+                        rank={results.rank}
+                        danger={results.danger_rate}
+                        kuma={results.kuma_point}
+                        grade={results.grade.name}
+                        score={results.job_score}
                       />
                     </h4>
                     <SalmonTeamStatsTable team={myTeam} result={results} />
+                  </Col>
+                  <Col sm={6} md={6} key="waveDetail">
+                    <h4>
+                      <FormattedMessage
+                        id="salmonresultDetails.teamsButton.waveDetailTitle"
+                        defaultMessage="Wave Detail"
+                      />
+                    </h4>
+                      <SalmonEnemyStatTable wave_details={wave_details} job_result={job_result} />
                   </Col>
             </Row>
           </Grid>

@@ -364,9 +364,9 @@ class SalmonResultsCard extends React.Component {
                         />
                       ) : null}
                     </td>
-                    <td>{result.game_mode.key}</td>
-                    <td>{result.rule.name}</td>
-                    <td>{result.stage.name}</td>
+                    <td>{'coop'}</td>
+                    <td>{'coop'}</td>
+                    <td>{result.schedule.stage.name}</td>
                     <td>{result.my_team_result.key}</td>
                     <td>
                       {result.other_estimate_league_point != null

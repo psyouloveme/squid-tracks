@@ -272,7 +272,7 @@ const SalmonDetail = ({ detail }) => {
   );
 };
 
-class Salmon extends React.Component {
+class SalmonSchedule extends React.Component {
   componentDidMount() {
     this.props.splatnet.comm.updateCoop();
   }
@@ -310,7 +310,7 @@ class Salmon extends React.Component {
 const SalmonWithSplatnet = () => {
   return (
     <Subscriber channel="splatnet">
-      {splatnet => <Salmon splatnet={splatnet} />}
+      {splatnet => <SalmonSchedule splatnet={splatnet} />}
     </Subscriber>
   );
 };

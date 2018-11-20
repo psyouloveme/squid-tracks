@@ -19,20 +19,14 @@ const SalmonTeamHeader = ({ player = { player: {} } }) => (
       </th>
       <th>
         <FormattedMessage
-          id="salmonresultDetails.teamStats.header.bossKills"
-          defaultMessage="Boss Kills"
-        />
-      </th>
-      <th>
-        <FormattedMessage
-          id="salmonresultDetails.teamStats.header.deaths"
-          defaultMessage="Deaths"
-        />
-      </th>
-      <th>
-        <FormattedMessage
           id="salmonresultDetails.teamStats.header.specials"
           defaultMessage="Special"
+        />
+      </th>
+      <th>
+        <FormattedMessage
+          id="salmonresultDetails.teamStats.header.bossKills"
+          defaultMessage="Boss Kills"
         />
       </th>
       <th>
@@ -49,8 +43,14 @@ const SalmonTeamHeader = ({ player = { player: {} } }) => (
       </th>
       <th>
         <FormattedMessage
+          id="salmonresultDetails.teamStats.header.deaths"
+          defaultMessage="D"
+        />
+      </th>
+      <th>
+        <FormattedMessage
           id="salmonresultDetails.teamStats.header.revives"
-          defaultMessage="Revives"
+          defaultMessage="R"
         />
       </th>
     </tr>
@@ -63,51 +63,76 @@ const SalmonPlayerRow = ({ player, playerDropped, thumbBase }) => {
   const bossKillCount = Object.keys(boss_kill_counts).reduce(function(previous, key) {
     return parseInt(previous) + parseInt(boss_kill_counts[key].count);
   });
+  let weaponToolTips = {}
+  for (let weapon of player.weapon_list){
+    if (!weaponToolTips.hasOwnProperty(weapon.weapon.id)){
+      weaponToolTips[weapon.weapon.id] = (<Tooltip id={'weapon-' + weapon.weapon.id}> {weapon.weapon.name}</Tooltip>);
+    }
+  }
 
   return ( 
     <tr style={{ color: playerDropped ? 'lightgrey' : undefined }} >
       <td>
-        {
-          playerDropped ? 
-            (<strike>{player.name}</strike>)
-          : 
-            (player.name)
-        }
+        { playerDropped ? (<strike>{ player.name }</strike>) : (player.name) }
       </td>
 
       <td style={{ textAlign: 'center', background: 'darkgrey' }}>
-        {player.weapon_list.map((weapon) => {
+        {player.weapon_list.map((weapon, roundNumber) => {
           return (
-            <OverlayTrigger placement='bottom' overlay={
-              <Tooltip id={'weapon-' + weapon.weapon.id + '-' + player.pid}>
-                          {weapon.weapon.name}
-              </Tooltip>}
-            >
+            <OverlayTrigger key={roundNumber + '-' + weapon.weapon.id} placement='bottom' overlay={weaponToolTips[weapon.weapon.id]}>
             <Image
               src={thumbBase + weapon.weapon.thumbnail}
               style={{ maxHeight: 30 }}
               alt={weapon.name}
-              title={weapon.name}
+              key={roundNumber + '-' + weapon.weapon.id}
             />
             </OverlayTrigger>
         )})}
       </td>
-      <td>
-        {bossKillCount}        
+      <td style={{ textAlign: 'center', background: 'darkgrey' }}>
+      {
+        <OverlayTrigger placement='bottom' overlay={
+          <Tooltip key={player.special.id} id={'weapon-' + player.special.id}>{player.special.name}</Tooltip>
+        }>
+          <Image
+            src={thumbBase + player.special.image_a}
+            style={{ maxHeight: 30 }}
+            alt={player.special.name}
+            key={player.special.id}
+          />
+        </OverlayTrigger>
+      }
       </td>
-      <td>
-        {player.dead_count}
-      </td>
-      <td>{player.special.name}</td>
+      <td>{bossKillCount}</td>
       <td>{player.golden_ikura_num}</td>
       <td>{player.ikura_num}</td>
+      <td>{player.dead_count}</td>
       <td>{player.help_count}</td>
     </tr>
   );
 };
 
 const SalmonTeamStatTable = ({ result, team }) => {
-  console.log('stattable player', team[1]);
+  console.log('team', team);
+
+  const boss_kill_total = team.reduce((sum, player) => {
+    return sum + Object.keys(player.boss_kill_counts).reduce((previous, key) => {
+      return parseInt(previous) + parseInt(player.boss_kill_counts[key].count);
+    }, 0);
+  }, 0);
+  const golden_egg_total = team.reduce((sum, player) => {
+    return sum + player.golden_ikura_num;
+  }, 0);
+  const power_egg_total = team.reduce((sum, player) => {
+    return sum + player.ikura_num;
+  }, 0);
+  const death_total = team.reduce((sum, player) => {
+    return sum + player.dead_count;
+  }, 0);
+  const help_total = team.reduce((sum, player) => {
+    return sum + player.help_count;
+  }, 0);
+
   return (
     <Table striped bordered condensed hover>
       <SalmonTeamHeader player={team[0]} />
@@ -121,7 +146,7 @@ const SalmonTeamStatTable = ({ result, team }) => {
           />
         ))}
       </tbody>
-      {/* <tfoot>
+      <tfoot>
         <tr>
           <th>
             <FormattedMessage
@@ -130,15 +155,16 @@ const SalmonTeamStatTable = ({ result, team }) => {
             />
           </th>
           <th />
-          {team[0].player.udemae ? <th /> : null}
+          <th />
           <td>
-            {team.reduce((sum, player) => sum + player.game_paint_point, 0)}
+            {boss_kill_total}
           </td>
-          <td>{`${total_k + total_a} (${total_a})`}</td>
-          <td>{`${total_k} / ${total_d}`}</td>
-          <td>{`${total_s}`}</td>
+          <td>{golden_egg_total}</td>
+          <td>{power_egg_total}</td>
+          <td>{death_total}</td>
+          <td>{help_total}</td>
         </tr>
-      </tfoot> */}
+      </tfoot>
     </Table>
   );
 };

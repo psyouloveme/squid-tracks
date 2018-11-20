@@ -13,24 +13,42 @@ const labelStyle = {
 };
 
 
-const LeagueLabels = ({ result, colorMap }) => {
+const SalmonLabels = ({ result, colorMap }) => {
   return (
     <React.Fragment>
-      {result.league_point != null ? (
-        <Label style={{ background: colorMap.normal, ...labelStyle }}>
+
+      {(result.grade_point != null && result.grade != null) ? (
+        <Label style={{ background: colorMap.dark, ...labelStyle }}>
           <FormattedMessage
-            id="salmonresultDetails.summary.currentPower"
-            defaultMessage="Current Power {power}"
-            values={{ power: result.league_point }}
+            id="salmonresultDetails.summary.currentGrade"
+            defaultMessage="{title} {grade} ({plus}{delta})"
+            values={{ 
+              title: result.grade.name, 
+              grade: result.grade_point,
+              plus: result.grade_point_delta > 0 ? '+' : '',
+              delta: result.grade_point_delta 
+            }}
           />
         </Label>
       ) : null}
-      {result.max_league_point != null && result.max_league_point > 0 ? (
+
+
+      {result.danger_rate != null ? (
         <Label style={{ background: colorMap.dark, ...labelStyle }}>
           <FormattedMessage
-            id="resultDetails.summary.maxPower"
-            defaultMessage="Max Power {power}"
-            values={{ power: result.max_league_point }}
+            id="salmonresultDetails.summary.hazard"
+            defaultMessage="Hazard Level {hazard}%"
+            values={{ hazard: result.danger_rate }}
+          />
+        </Label>
+      ) : null}
+
+      {result.danger_rate != null ? (
+        <Label style={{ background: colorMap.dark, ...labelStyle }}>
+          <FormattedMessage
+            id="salmonresultDetails.summary.grizzpoints"
+            defaultMessage="{grizzpoints}p"
+            values={{ grizzpoints: result.kuma_point }}
           />
         </Label>
       ) : null}
@@ -41,6 +59,7 @@ const LeagueLabels = ({ result, colorMap }) => {
 const BattleLabels = ({ result }) => {
   const lobby = 'coop';
   const colorMap = LobbyColors[lobby];
+  console.log('battlelabel', result);
   return (
     <React.Fragment>
       <Label
@@ -57,10 +76,10 @@ const BattleLabels = ({ result }) => {
           }}
         />
       </Label>
-      <Label style={{ background: colorMap.normal, ...labelStyle }}>
+      {/* <Label style={{ background: colorMap.normal, ...labelStyle }}>
         {'coop'}
-      </Label>
-
+      </Label> */}
+      <SalmonLabels result={result} colorMap={colorMap} />
       {/* <LeagueLabels result={result} colorMap={colorMap} />
       <XRankLabels result={result} colorMap={colorMap} />
       <FestivalLabels result={result} colorMap={colorMap} />

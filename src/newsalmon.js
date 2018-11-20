@@ -11,7 +11,7 @@ import SalmonResultDetailCard from "./components/salmon-result-detail-card";
 import lodash from 'lodash';
 
 
-class NewSalmon extends React.Component {
+class SalmonResults extends React.Component {
   state = {
     currentResultIndex: -1,
     statInk: {},
@@ -130,7 +130,7 @@ class NewSalmon extends React.Component {
 const SubscribedSalmonResults = () => {
   return (
     <Subscriber channel="splatnet">
-      {splatnet => <NewSalmon splatnet={splatnet} />}
+      {splatnet => <SalmonResults splatnet={splatnet} />}
     </Subscriber>
   );
 };
