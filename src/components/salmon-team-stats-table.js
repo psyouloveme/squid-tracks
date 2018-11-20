@@ -63,7 +63,7 @@ const SalmonPlayerRow = ({ player, playerDropped, thumbBase }) => {
   console.log('SalmonPlayerRow:player', player)
   console.log('SalmonPlayerRow:playerDropped', playerDropped)
   console.log('SalmonPlayerRow:thumbBase', thumbBase)
-  return (
+  return ( 
     <tr style={{ color: playerDropped ? 'lightgrey' : undefined }} >
       <td>
         {
