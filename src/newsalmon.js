@@ -6,7 +6,7 @@ import './salmon.css';
 import { ipcRenderer } from 'electron';
 import SalmonResultControl from "./components/salmon-results-controls";
 import SalmonSummaryCard from "./components/salmon-summary-card";
-import SalmonResultsCard from "./components/salmon-results-card";
+import SalmonBossDetailCard from "./components/salmon-boss-detail-card";
 import SalmonResultDetailCard from "./components/salmon-result-detail-card";
 import lodash from 'lodash';
 
@@ -113,15 +113,20 @@ class SalmonResults extends React.Component {
                 changeResult={this.changeResultByBattleNumber}
                 summary={results.summary}
               />) : null}
-          <SalmonSummaryCard data={coop_results.summary.card}/>
+          {/* <SalmonBossDetailCard results={currentJob} statInk={statInk} />
+          <SalmonSummaryCard data={coop_results.summary.card}/> */}
           {/* <SalmonResultsCard results={results} statInk={statInk} changeResult={this.changeResultByBattleNumber} summary={summary}/> */}
 
           </Col>
         </Row>
-        {/* <Row>
-          <Col md={12}>
+        <Row>
+          <Col md={6}>
+          <SalmonBossDetailCard results={currentJob} statInk={statInk} />
           </Col>
-        </Row> */}
+          <Col md={6}>
+          <SalmonSummaryCard data={coop_results.summary.card}/>
+          </Col>
+        </Row>
       </Grid>
     );
   }

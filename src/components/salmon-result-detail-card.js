@@ -253,7 +253,10 @@ class SalmonResultDetailCard extends React.Component {
   render() {
     const { results, statInk } = this.props;
     const { anonymize } = this.state;
-    const { wave_details, job_result } = results;
+    const { 
+      wave_details, 
+      job_result,
+    } = results;
     if (lodash.isEmpty(results)) {
       return null;
     }
@@ -261,33 +264,11 @@ class SalmonResultDetailCard extends React.Component {
     const linkInfo = statInk[results.job_id];
     const resultChanged = anonymize ? this.anonymize(results) : results;
 
+    // add my results to other results
     const myTeam = resultChanged.other_results.slice(0);
-    //myTeam.unshift(resultChanged.player_result);
     myTeam.unshift(resultChanged.my_result);
 
-    //myTeam.sort((a, b) => b.sort_score - a.sort_score);
 
-
-    // const otherTeam = resultChanged.other_team_members
-    //   .slice(0)
-    //   .sort((a, b) => b.sort_score - a.sort_score);
-
-    // idk about kad here....?
-    //const maximums = this.calculateMaximums(myTeam, otherTeam);
-
-    // const myTeamPower =
-    //   resultChanged.my_estimate_league_point != null
-    //     ? resultChanged.my_estimate_league_point
-    //     : resultChanged.my_estimate_fes_power != null
-    //       ? resultChanged.my_estimate_fes_power
-    //       : null;
-    // const otherTeamPower =
-    //   resultChanged.other_estimate_league_point != null
-    //     ? resultChanged.other_estimate_league_point
-    //     : resultChanged.other_estimate_fes_power != null
-    //       ? resultChanged.other_estimate_fes_power
-    //       : null;
-    console.log(results);
     return (
       <div className={'coop'}>
         <PanelWithMenu

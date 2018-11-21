@@ -11,7 +11,7 @@ const SalmonTeamHeader = ({ player = { player: {} } }) => (
           defaultMessage="Player"
         />
       </th>
-      <th>
+      <th colSpan={3}>
         <FormattedMessage
           id="salmonresultDetails.teamStats.header.weapon"
           defaultMessage="Weapon"
@@ -41,18 +41,24 @@ const SalmonTeamHeader = ({ player = { player: {} } }) => (
           defaultMessage="Power Eggs"
         />
       </th>
+        <OverlayTrigger 
+          placement='top' 
+          overlay= {
+            <Tooltip key={'deaths'} id={'tooltip-deaths'}>Deaths</Tooltip>
+        }>
       <th>
-        <FormattedMessage
-          id="salmonresultDetails.teamStats.header.deaths"
-          defaultMessage="D"
-        />
+          <FormattedMessage id="salmonresultDetails.teamStats.header.deaths" defaultMessage="D"/>
       </th>
+        </OverlayTrigger>
+      <OverlayTrigger 
+          placement='top' 
+          overlay= {
+            <Tooltip key={'revives'} id={'tooltip-revives'}>Revives</Tooltip>
+        }>
       <th>
-        <FormattedMessage
-          id="salmonresultDetails.teamStats.header.revives"
-          defaultMessage="R"
-        />
+          <FormattedMessage id="salmonresultDetails.teamStats.header.revives" defaultMessage="R"/>
       </th>
+        </OverlayTrigger>
     </tr>
   </thead>
 );
@@ -60,9 +66,9 @@ const SalmonTeamHeader = ({ player = { player: {} } }) => (
 const SalmonPlayerRow = ({ player, playerDropped, thumbBase }) => {
   //TODO: figure out how to tell if someone dropped and re-add strikes/styles
   const { boss_kill_counts } = player;
-  const bossKillCount = Object.keys(boss_kill_counts).reduce(function(previous, key) {
-    return parseInt(previous) + parseInt(boss_kill_counts[key].count);
-  });
+
+  const bossKillCount = Object.keys(boss_kill_counts).reduce((sum, key) => sum + parseInt(boss_kill_counts[key].count), 0)
+
   let weaponToolTips = {}
   for (let weapon of player.weapon_list){
     if (!weaponToolTips.hasOwnProperty(weapon.weapon.id)){
@@ -76,7 +82,7 @@ const SalmonPlayerRow = ({ player, playerDropped, thumbBase }) => {
         { playerDropped ? (<strike>{ player.name }</strike>) : (player.name) }
       </td>
 
-      <td style={{ textAlign: 'center', background: 'darkgrey' }}>
+      <td colSpan={3} style={{ textAlign: 'center', background: 'darkgrey' }}>
         {player.weapon_list.map((weapon, roundNumber) => {
           return (
             <OverlayTrigger key={roundNumber + '-' + weapon.weapon.id} placement='bottom' overlay={weaponToolTips[weapon.weapon.id]}>
@@ -154,11 +160,9 @@ const SalmonTeamStatTable = ({ result, team }) => {
               defaultMessage="Totals"
             />
           </th>
-          <th />
-          <th />
-          <td>
-            {boss_kill_total}
-          </td>
+          <th colSpan={3}/>
+          <th/>
+          <td>{boss_kill_total}</td>
           <td>{golden_egg_total}</td>
           <td>{power_egg_total}</td>
           <td>{death_total}</td>

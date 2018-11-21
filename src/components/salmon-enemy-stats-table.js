@@ -135,7 +135,7 @@ const SalmonEnemyStatTable = ({ wave_details, job_result }) => {
     <Table striped bordered condensed hover>
       <thead>
         <tr>
-          <th></th>
+          <th>&nbsp;</th>
           <th>Wave 1</th>
           <th>Wave 2</th>
           <th>Wave 3</th>
@@ -144,7 +144,13 @@ const SalmonEnemyStatTable = ({ wave_details, job_result }) => {
       </thead>
       <tbody>
         <tr>
-          <th>Golden Eggs N/P/Q</th>
+          <OverlayTrigger 
+            placement='top' 
+            overlay= {
+              <Tooltip key={'npq'} id={'tooltip-npq'}>Collected/Total/Quota</Tooltip>
+          }>
+            <th>Golden Eggs N/P/Q</th>
+          </OverlayTrigger>
           <td>
             {wavedata.one.golden_ikura_num}/
             {wavedata.one.golden_ikura_pop_num}/
@@ -159,37 +165,37 @@ const SalmonEnemyStatTable = ({ wave_details, job_result }) => {
             {wavedata.three != null ? wavedata.three.golden_ikura_pop_num : ''}/
             {wavedata.three != null ? wavedata.three.quota_num : ''}
           </td>
-          <td>
+          <th>
             {goldenIkaraNumTotal}/{goldenIkaraPopNumTotal}/{quotaNumTotal}
-          </td>
+          </th>
         </tr>
         <tr>
           <th>Power Eggs</th>
           <td>{wavedata.one.ikura_num}</td>
           <td>{wavedata.two != null ? wavedata.two.ikura_num : ''}</td>
           <td>{wavedata.three != null ? wavedata.three.ikura_num : ''}</td>
-          <td>{ikuraNumTotal}</td>
+          <th>{ikuraNumTotal}</th>
         </tr>
         <tr>
           <th>Event</th>
           <td>{wave_details[0].event_type.name}</td>
           <td>{wavedata.two != null ? wavedata.two.event_type.name : ''}</td>
           <td>{wavedata.three != null ? wavedata.three.event_type.name : ''}</td>
-          <td></td>
+          <th>&nbsp;</th>
         </tr>
         <tr>
           <th>Water Level</th>
           <td>{wavedata.one.water_level.name}</td>
           <td>{wavedata.two != null ? wavedata.two.water_level.name : ''}</td>
           <td>{wavedata.three != null ? wavedata.three.water_level.name : ''}</td>
-          <td></td>
+          <th>&nbsp;</th>
         </tr>
         <tr>
           <th>&nbsp;</th>
           <td>{job_result.is_clear ? '' : (job_result.failure_wave === 1 ? job_result.failure_reason : '' )}</td>
           <td>{job_result.is_clear ? '' : (job_result.failure_wave === 2 ? job_result.failure_reason : '' )}</td>
           <td>{job_result.is_clear ? '' : (job_result.failure_wave === 3 ? job_result.failure_reason : '' )}</td>
-          <td></td>
+          <th>&nbsp;</th>
         </tr>
       </tbody>
     </Table>

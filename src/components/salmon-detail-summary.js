@@ -105,7 +105,13 @@ const JobSummary = ({ result }) => {
   const { is_clear, failure_reason, failure_wave } = result.job_result
   
   // use simple third here so a loss is at 99%
-  const jobResult = is_clear ? 100 : failure_wave * (33);
+  //const jobResult = is_clear ? 100 : failure_wave * (33);
+
+  const last_completed_wave = is_clear ? 3 : failure_wave - 1;
+  const incomplete_waves = 3 - last_completed_wave;
+  //const jobResult = last_completed_wave;
+  //const jobFailure = 100 - jobResult;
+  const jobResult = last_completed_wave * (100/3);
   const jobFailure = 100 - jobResult;
 
   return (
@@ -147,7 +153,7 @@ const JobSummary = ({ result }) => {
               striped
               now={jobResult}
               bsStyle="info"
-              label={jobResult}
+              label={last_completed_wave > 0 ? (last_completed_wave + (last_completed_wave > 1 ? " Waves" : " Wave")) : '' }
               key={1}
               style={{ fontSize: 16, padding: '.35em 0' }}
             />
@@ -155,7 +161,7 @@ const JobSummary = ({ result }) => {
               striped
               now={jobFailure}
               bsStyle="warning"
-              label={jobFailure}
+              label={ incomplete_waves > 0 ? (incomplete_waves + (incomplete_waves > 1 ? " Waves" : " Wave")) : ''}
               key={2}
               style={{ fontSize: 16, padding: '.35em 0' }}
             />

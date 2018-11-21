@@ -6,7 +6,8 @@ import './results-summary-card.css';
 import {
     Grid,
     Row,
-    Col
+    Col,
+    Table
   } from 'react-bootstrap';
 import PanelWithMenu from './panel-with-menu';
 
@@ -54,6 +55,7 @@ class SalmonSummaryCard extends React.Component {
     const { activeValue } = this.state;
 
     return (
+      <div className={'coop'}>
         <PanelWithMenu header={<h3 className="panel-title">Salmon Run Summary</h3>}>
         <Grid fluid style={{paddingLeft: 0, paddingRight: 0}}>
             <Row>
@@ -64,6 +66,7 @@ class SalmonSummaryCard extends React.Component {
 
         </Grid>
         </PanelWithMenu>
+      </div>
     );
   }
 }
@@ -71,33 +74,16 @@ class SalmonSummaryCard extends React.Component {
 
 const SummaryCard = ({data}) => {
     return (
-        <div>
-            <Row>
-                <Col md={8}>Current points</Col>
-                <Col md={2}/>
-                <Col md={2}>{data.kuma_point}p</Col>
-            </Row>
-            <Row>
-                <Col md={10}>Shifts worked</Col>
-                <Col md={2}>{data.job_num}</Col>
-            </Row>
-            <Row>
-                <Col md={10}>Golden Eggs collected</Col>
-                <Col md={2}>{data.golden_ikura_total}</Col>
-            </Row>
-            <Row>
-                <Col md={10}>Power Eggs collected</Col>
-                <Col md={2}>{data.ikura_total}</Col>
-            </Row>
-            <Row>
-                <Col md={10}>Crew members rescued</Col>
-                <Col md={2}>{data.help_total}</Col>
-            </Row>
-            <Row>
-                <Col md={10}>Total Points</Col>
-                <Col md={2}>{data.kuma_point_total}p</Col>
-            </Row>
-        </div>
+      <Table striped bordered condensed hover>
+        <tbody>
+        <tr><th>Current points</th><td>{data.kuma_point + 'p'}</td></tr>
+        <tr><th>Shifts worked</th><td>{data.job_num}</td></tr>
+        <tr><th>Golden Eggs collected</th><td>{data.golden_ikura_total}</td></tr>
+        <tr><th>Power Eggs collected</th><td>{data.ikura_total}</td></tr>
+        <tr><th>Crew members rescued</th><td>{data.help_total}</td></tr>
+        <tr><th>Total Points</th><td>{data.kuma_point_total + 'p'}</td></tr>
+        </tbody>
+      </Table>
     )
 }
 
