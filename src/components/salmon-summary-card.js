@@ -1,7 +1,4 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import classnames from 'classnames';
-import Timeline from './results-timeline';
 import './results-summary-card.css';
 import {
     Grid,
@@ -10,36 +7,6 @@ import {
     Table
   } from 'react-bootstrap';
 import PanelWithMenu from './panel-with-menu';
-
-const ResultsSummaryValueDisplay = ({ className, onClick, label, value }) => {
-  return (
-    <div
-      className={className}
-      onClick={onClick}
-      style={{ cursor: onClick ? 'pointer' : 'default' }}
-    >
-      <h4>{label}</h4>
-      <span>{value}</span>
-    </div>
-  );
-};
-
-const SelectableValue = ({
-  className,
-  activeValue,
-  setActiveValue,
-  ...props
-}) => {
-  return (
-    <ResultsSummaryValueDisplay
-      className={classnames(className, { active: activeValue === className })}
-      onClick={() => {
-        setActiveValue(className);
-      }}
-      {...props}
-    />
-  );
-};
 
 class SalmonSummaryCard extends React.Component {
   state = {
@@ -51,8 +18,7 @@ class SalmonSummaryCard extends React.Component {
   };
 
   render() {
-    const { summary, averages, salmon, changeResult, data } = this.props;
-    const { activeValue } = this.state;
+    const { data } = this.props;
 
     return (
       <div className={'coop'}>

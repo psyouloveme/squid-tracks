@@ -67,7 +67,7 @@ const SalmonPlayerRow = ({ player, playerDropped, thumbBase }) => {
   //TODO: figure out how to tell if someone dropped and re-add strikes/styles
   const { boss_kill_counts } = player;
 
-  const bossKillCount = Object.keys(boss_kill_counts).reduce((sum, key) => sum + parseInt(boss_kill_counts[key].count), 0)
+  const bossKillCount = Object.keys(boss_kill_counts).reduce((sum, key) => sum + parseInt(boss_kill_counts[key].count, 10), 0)
 
   let weaponToolTips = {}
   for (let weapon of player.weapon_list){
@@ -119,11 +119,9 @@ const SalmonPlayerRow = ({ player, playerDropped, thumbBase }) => {
 };
 
 const SalmonTeamStatTable = ({ result, team }) => {
-  console.log('team', team);
-
   const boss_kill_total = team.reduce((sum, player) => {
     return sum + Object.keys(player.boss_kill_counts).reduce((previous, key) => {
-      return parseInt(previous) + parseInt(player.boss_kill_counts[key].count);
+      return parseInt(previous, 10) + parseInt(player.boss_kill_counts[key].count, 10);
     }, 0);
   }, 0);
   const golden_egg_total = team.reduce((sum, player) => {

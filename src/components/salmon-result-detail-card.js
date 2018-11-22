@@ -12,25 +12,19 @@ import {
   MenuItem,
   Label
 } from 'react-bootstrap';
-import { pick, mapKeys, cloneDeep } from 'lodash';
-import flatten from 'flat';
+import { cloneDeep } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import sillyname from 'sillyname';
-import { nativeImage, ipcRenderer, clipboard, remote } from 'electron';
+import { nativeImage, ipcRenderer, clipboard } from 'electron';
 import lodash from 'lodash';
 
 import JobSummary from './salmon-detail-summary';
-import SalmonResultsCard from './salmon-results-card';
 import SalmonTeamStatsTable from './salmon-team-stats-table';
 import SalmonEnemyStatTable from './salmon-enemy-stats-table';
 import PanelWithMenu from './panel-with-menu';
-import TeamRadar from './team-radar';
-import { getSalmonRunFields } from './export-detail-helpers';
 import { event } from '../analytics';
 
 import './result-detail-card.css';
-
-const { openExternal } = remote.shell;
 
 class SalmonResultDetailMenu extends React.Component {
   simplify(result) {
@@ -189,59 +183,6 @@ class SalmonResultDetailCard extends React.Component {
     anonymize: false
   };
 
-  showStats = () => {
-    event('result-details', 'show-stats');
-    this.setState({ show: 1 });
-  };
-
-  showInfo = () => {
-    event('result-details', 'show-info');
-    this.setState({ show: 3 });
-  };
-
-  showRadarTeam = () => {
-    event('result-details', 'show-radar-team');
-    this.setState({ show: 4 });
-  };
-
-  showRadarTotals = () => {
-    event('result-details', 'show-radar-game-totals');
-    this.setState({ show: 5 });
-  };
-
-  calculateMaximums = (myTeam, otherTeam) => {
-    const teams = myTeam.concat(otherTeam);
-    const k = teams.reduce(
-      (max, member) => (member.kill_count > max ? member.kill_count : max),
-      0
-    );
-    const a = teams.reduce(
-      (max, member) => (member.assist_count > max ? member.assist_count : max),
-      0
-    );
-    const d = teams.reduce(
-      (max, member) => (member.death_count > max ? member.death_count : max),
-      0
-    );
-    const s = teams.reduce(
-      (max, member) =>
-        member.special_count > max ? member.special_count : max,
-      0
-    );
-    const p = teams.reduce(
-      (max, member) =>
-        member.game_paint_point > max ? member.game_paint_point : max,
-      0
-    );
-
-    const kad = [k, a, d].reduce(
-      (max, value) => (value > max ? value : max),
-      0
-    );
-
-    return { k: kad, a: kad, d: kad, s, p };
-  };
-
   anonymize(result) {
     const newResult = cloneDeep(result);
     for (const player of newResult.name) {
@@ -251,7 +192,7 @@ class SalmonResultDetailCard extends React.Component {
   }
 
   render() {
-    const { results, statInk } = this.props;
+    const { results } = this.props;
     const { anonymize } = this.state;
     const { 
       wave_details, 
@@ -261,7 +202,6 @@ class SalmonResultDetailCard extends React.Component {
       return null;
     }
 
-    const linkInfo = statInk[results.job_id];
     const resultChanged = anonymize ? this.anonymize(results) : results;
 
     // add my results to other results

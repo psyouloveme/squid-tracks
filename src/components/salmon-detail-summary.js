@@ -59,7 +59,6 @@ const SalmonLabels = ({ result, colorMap }) => {
 const BattleLabels = ({ result }) => {
   const lobby = 'coop';
   const colorMap = LobbyColors[lobby];
-  console.log('battlelabel', result);
   return (
     <React.Fragment>
       <Label
@@ -83,7 +82,7 @@ const BattleLabels = ({ result }) => {
 
 
 const JobSummary = ({ result }) => {
-  const { is_clear, failure_reason, failure_wave } = result.job_result
+  const { is_clear, failure_wave } = result.job_result
   const last_completed_wave = is_clear ? 3 : failure_wave - 1;
   const incomplete_waves = 3 - last_completed_wave;
   const jobResult = last_completed_wave * (100/3);

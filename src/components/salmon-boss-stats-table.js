@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Image, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
 const SalmonBossHeader = ({team}) => (
@@ -47,7 +47,7 @@ const SalmonBossStatsTable = ({ team, boss_counts }) => {
   // add id and kills to boss count object, convert to array
   const modifiedBossCounts = Object.keys(boss_counts).map((key) => {
     return Object.assign({
-      id: parseInt(key),
+      id: parseInt(key, 10),
       kills: team.reduce((sum, player) => sum + player.boss_kill_counts[key].count, 0)
     }, boss_counts[key]);
   });

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Subscriber } from 'react-broadcast';
-import { FormattedMessage } from 'react-intl';
 import { Grid, Row, Col } from 'react-bootstrap';
 import './salmon.css';
 import { ipcRenderer } from 'electron';
@@ -90,7 +89,7 @@ class SalmonResults extends React.Component {
     const { splatnet } = this.props;
     const { coop_results } = splatnet.current;
     const { statInk, currentResultIndex } = this.state;
-    const { results, summary } = this.props.splatnet.current.coop_results;
+    const { results } = this.props.splatnet.current.coop_results;
     const currentJob = this.getCurrentSalmon();
     
     return (

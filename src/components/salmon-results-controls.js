@@ -47,7 +47,6 @@ class SalmonResultControl extends React.Component {
       statInk,
       intl
     } = this.props;
-    const { tokenExists } = this.state;
 
     const currentBattle = result.job_id ? result.job_id : 0;
     const uploaded = statInk ? statInk[currentBattle] != null : false;
