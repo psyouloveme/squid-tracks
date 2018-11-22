@@ -90,7 +90,64 @@ parameters
   clear_waves // job_result.is_clear ? 3 : job_result.failure_wave - 1
   fail_reason // job_result.failure_reason
   title // use grade.id and map like this
-        // 
+        // intern = no grade?
+        // apprentice = 1
+        // part_timer = 2
+        // go_getter = 3
+        // overachiever = 4 
+        // profreshional = 5
+  title_exp // 0-999, job_result.grade_point
+  title_after // ??
+  title_exp_after // ??
+  danger_rate // danger_rate
+  boss_appearances // map boss_counts to
+                   // boss_apperances: {
+                   //  name : count,
+                   //  ...
+                   // }
+                   // bosses - name by id:
+                   /*
+                      key       id spaltnetkey
+                      drizzler  21 sakerocket	
+                      flyfish    9 sakelien-cup-twins
+                      goldie     3 sakelien-golden
+                      griller	  16 sakedozer
+                      maws	    15 sakediver
+                      scrapper	12 sakelien-shield
+                      steel_eel	13 sakelien-snake
+                      steelhead	 6 sakelien-bomber
+                      stinger	  14 sakelien-tower
+                   */
+  waves // array of wave data
+        /*
+        "waves": [
+          { // wave 1
+            "known_occurrence": "mothership", / wave_details[].event_type.key
+            "water_level": "normal",          / wave_details.water_level.key
+            "golden_egg_quota": 18,           / wave_details.quota_num
+            "golden_egg_appearances": 27,     / wave_details.golden_ikura_pop_num
+            "golden_egg_delivered": 23,       / wave_details.golden_ikura_num
+            "power_egg_collected": 695        / wave_details.ikura_num
+          },
+          ...
+        ]
+        */
+  my_data /*
+            player: {
+              splatnet_id : my_result.pid,
+              name: my_result.name,
+              special: map 8 => jetpack, 9 => chakuchi, 2 => pitcher, 7 => presser,
+              rescue: my_result.help_count,
+              death: ,
+              golden_egg_delivered: ,
+              power_egg_delivered: ,
+              species: ,
+              gender: ,
+              special_uses: ,
+              weapons: ,
+              boss_kills: ,
+            }*/
+  teammates /
 }
 ```
 
