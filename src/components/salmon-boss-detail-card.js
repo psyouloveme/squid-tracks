@@ -5,7 +5,6 @@ import sillyname from 'sillyname';
 import { remote } from 'electron';
 import lodash from 'lodash';
 import SalmonBossStatsTable from './salmon-boss-stats-table';
-import SalmonBossPlayerStatsTable from './salmon-boss-player-stats-table';
 import { event } from '../analytics';
 import PanelWithMenu from './panel-with-menu';
 

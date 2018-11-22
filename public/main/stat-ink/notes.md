@@ -69,3 +69,28 @@ image_gear // screenshot of gear config
 death_reasons // can't do these, ikalog reads screen notification for thses
 events // can't do these, ikalog makes events like when the RM is picked up
 ```
+
+
+
+## Salmon Run Notes
+Salmon run API spec (beta as of 11-21-2018)
+https://github.com/fetus-hina/stat.ink/blob/master/doc/api-2/post-salmon.md
+
+parameters
+```js
+{
+  uuid // Generate a UUID version 5 with namespace 418fe150-cb33-11e8-8816-d050998473ba. Use splatnet_number @ principal_id. (Example: 42@abc123) uuid_v5("418fe150-cb33-11e8-8816-d050998473ba", sprintf("%d@%s", number, principal_id))
+  splatnet_number // job_id
+  stage // use schedule.stage.image and map like this
+        // shaketoba = Lost Outpost, 
+        // donburako = Marooner's Bay,
+        // polaris = Ruins of Ark Polaris
+        // tokishirazu = Salmonid Smokeyard
+        // dam = Spawning Grounds
+  clear_waves // job_result.is_clear ? 3 : job_result.failure_wave - 1
+  fail_reason // job_result.failure_reason
+  title // use grade.id and map like this
+        // 
+}
+```
+

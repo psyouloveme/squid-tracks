@@ -76,41 +76,16 @@ const BattleLabels = ({ result }) => {
           }}
         />
       </Label>
-      {/* <Label style={{ background: colorMap.normal, ...labelStyle }}>
-        {'coop'}
-      </Label> */}
       <SalmonLabels result={result} colorMap={colorMap} />
-      {/* <LeagueLabels result={result} colorMap={colorMap} />
-      <XRankLabels result={result} colorMap={colorMap} />
-      <FestivalLabels result={result} colorMap={colorMap} />
-      <RankedLabels result={result} colorMap={colorMap} />
-      <TurfLabels result={result} colorMap={colorMap} /> */}
     </React.Fragment>
   );
 };
 
 
 const JobSummary = ({ result }) => {
-  // const myScore =
-  //   result.my_team_count == null
-  //     ? result.my_team_percentage
-  //     : result.my_team_count;
-  // const otherScore =
-  //   result.other_team_count == null
-  //     ? result.other_team_percentage
-  //     : result.other_team_count;
-  // const totalScore = myScore + otherScore;
-  // const myNow = myScore * 100 / totalScore;
-  // const otherNow = otherScore * 100 / totalScore;
   const { is_clear, failure_reason, failure_wave } = result.job_result
-  
-  // use simple third here so a loss is at 99%
-  //const jobResult = is_clear ? 100 : failure_wave * (33);
-
   const last_completed_wave = is_clear ? 3 : failure_wave - 1;
   const incomplete_waves = 3 - last_completed_wave;
-  //const jobResult = last_completed_wave;
-  //const jobFailure = 100 - jobResult;
   const jobResult = last_completed_wave * (100/3);
   const jobFailure = 100 - jobResult;
 
